@@ -24,13 +24,19 @@ build() {
   cd $_svnname
   patch -Np1 -i ${srcdir}/ant-build-file-xalan-dependeny.patch || return 1
 
+  # build and install: sunxacml.jar
   cd sunxacml
-
   ant jar || return 1
-
   mkdir -p $startdir/pkg/usr/share/java/sunxacml
   cp build/lib/*.jar $startdir/pkg/usr/share/java/sunxacml
 
+  # install: license.txt
   mkdir -p $startdir/pkg/usr/share/license/sunxacml
   cp license.txt $startdir/pkg/usr/share/license/sunxacml
+
+  # build and install: support.jar
+  cd ../support/src
+  ant jar || return 1
+  cp build/lib/*.jar $startdir/pkg/usr/share/java/sunxacml
+
 }
